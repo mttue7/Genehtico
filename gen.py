@@ -112,7 +112,7 @@ def gerar_pontos_circulo(n, raio=50):
 # Parâmetros do algoritmo genético
 tamanho_populacao = 100
 numero_geracoes = 500
-taxa_mutacao = 0.05
+taxa_mutacao = 0.04
 
 # Teste com pontos aleatórios
 pontos_uniformes = gerar_pontos_uniforme(10)
