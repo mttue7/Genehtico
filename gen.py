@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import time
 
 # Função para calcular a distância euclidiana
 def calcular_distancia(ponto1, ponto2):
@@ -56,6 +57,11 @@ def algoritmo_genetico(pontos, tamanho_populacao, numero_geracoes, taxa_mutacao)
     melhor_distancia = float('inf')
     historico_aptidao = []
 
+    # Variáveis para detectar 10 gerações consecutivas com a mesma aptidão
+    repeticoes_consecutivas = 0
+    gen_Inicio = None
+    ultima_aptidao = None
+
     for geracao in range(numero_geracoes):
         nova_populacao = []
         for _ in range(tamanho_populacao // 2):
@@ -80,6 +86,23 @@ def algoritmo_genetico(pontos, tamanho_populacao, numero_geracoes, taxa_mutacao)
         melhor_aptidao = min(aptidoes)
         melhor_individuo = populacao[np.argmin(aptidoes)]
 
+        # Verificação de repetição de aptidão
+        if melhor_aptidao == ultima_aptidao:
+            repeticoes_consecutivas += 1
+            if repeticoes_consecutivas == 1:  # Marca o início da repetição
+                gen_Inicio = geracao
+        else:
+            repeticoes_consecutivas = 0  # Resetar se houver uma melhoria
+            gen_Inicio = None
+
+        ultima_aptidao = melhor_aptidao
+
+        # Critério de parada: 50 gerações com a mesma aptidão
+        if repeticoes_consecutivas >= 50 and gen_Inicio is not None:
+            print("Critério de parada atingido: Melhor aptidão repetida por 50 gerações")
+            break
+
+        # Atualizar o melhor caminho encontrado
         if melhor_aptidao < melhor_distancia:
             melhor_distancia = melhor_aptidao
             melhor_caminho = melhor_individuo
@@ -87,16 +110,20 @@ def algoritmo_genetico(pontos, tamanho_populacao, numero_geracoes, taxa_mutacao)
         historico_aptidao.append(melhor_distancia)
 
         # Mostrar o desempenho a cada geração
-        if geracao % 10 == 0:
-            print(f"Geração {geracao}: Melhor distância = {melhor_distancia}")
+        print(f"Geração {geracao}: Melhor distância = {melhor_distancia:.3f}")
 
     return melhor_caminho, melhor_distancia, historico_aptidao
+
 
 # Função para visualizar o caminho
 def mostrar_caminho(pontos, caminho):
     plt.figure(figsize=(8, 6))
     ciclo = np.append(caminho, caminho[0])  # Fechar o ciclo
     plt.plot(pontos[ciclo, 0], pontos[ciclo, 1], 'o-', markersize=10)
+    
+    plt.title("Gráfico dos pontos")
+    plt.xlabel("coordenada x")
+    plt.ylabel("coordenada y")
     plt.show()
 
 # Função para gerar pontos aleatórios ou em círculo
@@ -109,24 +136,48 @@ def gerar_pontos_circulo(n, raio=50):
     y = raio * np.sin(angulos) + raio
     return np.column_stack((x, y))
 
+# Função para medir o tempo de execução
+def timx(func, *args):
+    inicio = time.time()
+    resultado = func(*args)
+    fim = time.time()
+    print(f"\nTempo de execução é: {fim - inicio:.2f} segundos\n\n")
+    return resultado
+
 # Parâmetros do algoritmo genético
 tamanho_populacao = 100
 numero_geracoes = 500
-taxa_mutacao = 0.04
+taxa_mutacao = 0.1
 
-# Teste com pontos aleatórios
+# Teste com 10 pontos
 pontos_uniformes = gerar_pontos_uniforme(10)
-melhor_caminho, melhor_distancia, historico = algoritmo_genetico(pontos_uniformes, tamanho_populacao, numero_geracoes, taxa_mutacao)
+melhor_caminho, melhor_distancia, historico_10 = timx(algoritmo_genetico,pontos_uniformes, tamanho_populacao, numero_geracoes, taxa_mutacao)
 mostrar_caminho(pontos_uniformes, melhor_caminho)
 
-# Teste com pontos em círculo
-pontos_circulo = gerar_pontos_circulo(10)
-melhor_caminho, melhor_distancia, historico = algoritmo_genetico(pontos_circulo, tamanho_populacao, numero_geracoes, taxa_mutacao)
-mostrar_caminho(pontos_circulo, melhor_caminho)
+plt.plot(historico_10)
+plt.title("Desempenho ao longo das gerações - 10 pontos")
+plt.xlabel("Geração")
+plt.ylabel("Melhor distância")
+plt.show()
 
-# Plotar o desempenho ao longo das gerações
-plt.plot(historico)
-plt.title("Desempenho ao longo das gerações")
+# Teste com 100 pontos
+pontos_mais = gerar_pontos_circulo(100)
+melhor_caminho, melhor_distancia, historico_100 = timx(algoritmo_genetico,pontos_mais, tamanho_populacao, numero_geracoes, taxa_mutacao)
+mostrar_caminho(pontos_mais, melhor_caminho)
+
+plt.plot(historico_100)
+plt.title("Desempenho ao longo das gerações - 100 pontos")
+plt.xlabel("Geração")
+plt.ylabel("Melhor distância")
+plt.show()
+
+# Teste com 200 pontos
+pontos_mais_x = gerar_pontos_circulo(200)
+melhor_caminho, melhor_distancia, historico_200 = timx(algoritmo_genetico,pontos_mais_x, tamanho_populacao, numero_geracoes, taxa_mutacao)
+mostrar_caminho(pontos_mais_x, melhor_caminho)
+
+plt.plot(historico_200)
+plt.title("Desempenho ao longo das gerações - 1000 pontos")
 plt.xlabel("Geração")
 plt.ylabel("Melhor distância")
 plt.show()
