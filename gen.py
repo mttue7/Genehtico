@@ -126,6 +126,30 @@ def mostrar_caminho(pontos, caminho, ax):
     ax.set_ylabel("coordenada y")
     ax.grid()
 
+"""
+# Função para visualizar o caminho gerado
+def mostrar_caminho(pontos, caminho, ax):
+    # Calcular o centro dos pontos
+    centro = np.mean(pontos, axis=0)
+    
+    # Calcular ângulos dos pontos em relação ao centro
+    angulos = np.arctan2(pontos[caminho, 1] - centro[1], pontos[caminho, 0] - centro[0])
+    
+    # Ordenar os índices dos pontos pelo ângulo
+    ordem = np.argsort(angulos)
+    
+    # Obter o ciclo na ordem correta
+    ciclo = np.append(np.array(caminho)[ordem], np.array(caminho)[ordem[0]])  # Fechar o ciclo
+
+    # Plotar os pontos
+    ax.plot(pontos[ciclo, 0], pontos[ciclo, 1], 'o-', markersize=10)
+
+    ax.set_title("Gráfico dos pontos")
+    ax.set_xlabel("coordenada x")
+    ax.set_ylabel("coordenada y")
+    ax.grid()
+"""
+
 # Função para gerar pontos aleatórios (uniforme ou em círculo)
 def gerar_pontos_uniforme(n):
     return np.random.rand(n, 2) * 100
