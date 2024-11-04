@@ -167,7 +167,7 @@ evitando que o algoritmo fique preso em soluções ruins
 sem, ao mesmo tempo, gerar tanta aleatoriedade a ponto de desfazer o progresso feito.
 """
 
-fig, axs = plt.subplots(6, 2, figsize=(19, 35))
+fig, axs = plt.subplots(6, 2, figsize=(19, 40))
 plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
 # Teste com 15 pontos (pontos uniformes)
@@ -201,7 +201,7 @@ def exibir_interface():
     canvas.bind_all("<MouseWheel>", on_mouse_wheel)
 
     # Preparação da figura para subplots
-    fig, axs = plt.subplots(6, 2, figsize=(19, 35))
+    fig, axs = plt.subplots(6, 2, figsize=(19, 40))
     plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
     # 15 pontos
