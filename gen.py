@@ -167,8 +167,8 @@ evitando que o algoritmo fique preso em soluções ruins
 sem, ao mesmo tempo, gerar tanta aleatoriedade a ponto de desfazer o progresso feito.
 """
 
-# Preparação da figura para subplots
-fig, axs = plt.subplots(6, 2, figsize=(14, 25))
+fig, axs = plt.subplots(6, 2, figsize=(19, 35))
+plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
 # Teste com 15 pontos (pontos uniformes)
 pontos_uniformes = gerar_pontos_uniforme(15)
@@ -197,7 +197,9 @@ def exibir_interface():
     canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-    fig, axs = plt.subplots(6, 2, figsize=(14, 25))
+    # Preparação da figura para subplots
+    fig, axs = plt.subplots(6, 2, figsize=(19, 35))
+    plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
     # 15 pontos
     pontos_uniformes_15 = gerar_pontos_uniforme(15)
@@ -243,6 +245,8 @@ def exibir_interface():
     axs[5, 1].plot(historico_280_circ)
     axs[5, 1].set_title("Desempenho ao longo das gerações - 280 pontos (Circular)")
     axs[5, 1].grid()
+
+    plt.tight_layout()
 
     canvas_fig = FigureCanvasTkAgg(fig, scrollable_frame)
     canvas_fig.get_tk_widget().pack()
