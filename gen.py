@@ -188,14 +188,17 @@ def exibir_interface():
     scrollable_frame = tk.Frame(canvas)
     scrollable_frame.bind(
         "<Configure>",
-        lambda e: canvas.configure(
-            scrollregion=canvas.bbox("all")
-        )
+        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
     )
     canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
     canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+    def on_mouse_wheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    canvas.bind_all("<MouseWheel>", on_mouse_wheel)
 
     # Preparação da figura para subplots
     fig, axs = plt.subplots(6, 2, figsize=(19, 35))
